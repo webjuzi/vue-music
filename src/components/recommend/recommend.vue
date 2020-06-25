@@ -1,53 +1,93 @@
 <template>
   <div class="recommend" ref="recommend">
-    <div class="recommend-content">
-      <div class="slider-wrapper" v-if="recommends.length">
-        <slider>
-          <div v-for="(item, index) in recommends" :key="index">
-            <a :href="compUrl(item.subid)">
-              <img :src="item.cover" alt="">
-            </a>
-          </div>
-        </slider>
+    <scroll ref="scroll" class="recommend-content" :data="discList">
+      <div>
+        <div class="slider-wrapper" v-if="recommends.length">
+          <slider>
+            <div v-for="(item, index) in recommends" :key="index">
+              <a :href="_compUrl(item.subid)">
+                <img class="needsclick" @load="loadImage" :src="item.cover" alt="">
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item, index) in discList" :key="index" class="item">
+              <div class="icon">
+                <img width="60" height="60" v-lazy="item.cover" alt="">
+              </div>
+              <div class="text">
+                <h2 class="name">{{ item.title }}</h2>
+                <p class="desc">{{'播放量：' + _listen_num(item.listen_num) + '万' }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul>
-        </ul>
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
-import { getRecommend } from 'api/recommend'
+import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
+import Loading from 'base/loading/loading'
 import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
 export default {
   data() {
     return {
-      recommends: []
+      recommends: [],
+      discList: []
     }
   },
   components: {
-    Slider
+    Slider,
+    Scroll,
+    Loading
   },
   created() {
     this._getRecommend()
+    this._getDiscList()
   },
   methods: {
-    // 获取数据
+    // 获取轮播图数据
     _getRecommend() {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
           this.recommends = res.focus.data.shelf.v_niche[0].v_card
-          console.log(this.recommends)
+          // console.log(this.recommends)
         }
       })
     },
-    // 拼接专辑的Url
-    compUrl(url) {
+    // 拼接轮播图专辑的Url
+    _compUrl(url) {
       return `https://y.qq.com/n/yqq/album/${url}.html`
+    },
+    // 获取热门歌单数据
+    _getDiscList() {
+      getDiscList().then(res => {
+        if (res.code === ERR_OK) {
+          this.discList = res.recomPlaylist.data.v_hot
+          // console.log(this.discList)
+        }
+      })
+    },
+    // 播放量改为“万”单位
+    _listen_num(num) {
+      return (num / 10000).toFixed(1)
+    },
+    // 图片加载好后触发，防止歌单列表高度计算不正确
+    loadImage() {
+      if (!this.checkLoad) {
+        this.$refs.scroll.refresh()
+        this.checkLoad = true
+      }
     }
   }
 }

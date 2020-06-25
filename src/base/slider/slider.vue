@@ -4,7 +4,10 @@
       <slot>
       </slot>
     </div>
+    <!-- 导航小圆点 -->
     <div class="dots">
+      <span class="dot" v-for="(item, index) in dots" :key="index"
+            :class="{active: currentPageIndex === index}"></span>
     </div>
   </div>
 </template>
@@ -29,7 +32,8 @@ export default {
   },
   data() {
     return {
-      dots: []
+      dots: [], // 小圆点
+      currentPageIndex: 0 // 当前在那张图片
     }
   },
   mounted() {
@@ -39,11 +43,23 @@ export default {
       // 初始化
       this._initDots()
       this._initSlider()
+      // 自动播放
+      if (this.autoPlay) {
+        this._play()
+      }
     }, 20)
+    // 监听窗口变化，重新计算宽度
+    window.addEventListener('resize', () => {
+      if (!this.slider) {
+        return
+      }
+      this._setSliderWidth(true)
+      this.slider.refresh()
+    })
   },
   methods: {
     // 计算slider的宽度
-    _setSliderWidth() {
+    _setSliderWidth(isResize) {
       this.children = this.$refs.sliderGroup.children
       let width = 0
       let sliderWidth = this.$refs.slider.clientWidth
@@ -55,7 +71,7 @@ export default {
         width += sliderWidth
       }
       // 无缝循环轮播的时候总宽度加两张图的宽度
-      if (this.loop) {
+      if (this.loop && !isResize) {
         width += 2 * sliderWidth
       }
       this.$refs.sliderGroup.style.width = width + 'px'
@@ -78,9 +94,30 @@ export default {
               return t * (2 - t)
             }
           }
-        },
-        click: true
+        }
       })
+      this.slider.on('scrollEnd', () => {
+        // 获取到当前在第一张图片赋值给小圆点
+        let pageIndex = this.slider.getCurrentPage().pageX
+        this.currentPageIndex = pageIndex
+        // 如果是自动轮播
+        if (this.autoPlay) {
+          // 先清除下定时器，从而重新计算轮播间隔
+          clearTimeout(this.timer)
+          this._play()
+        }
+      })
+    },
+    // 自动播放
+    _play() {
+      let pageIndex = this.currentPageIndex + 1
+      this.timer = setTimeout(() => {
+        this.slider.goToPage(pageIndex, 0, 400)
+      }, this.interval)
+      // 最后一张的时候回重置
+      if (pageIndex === this.dots.length) {
+        pageIndex = 0
+      }
     }
   }
 }
@@ -108,4 +145,22 @@ export default {
         img
           display: block
           width: 100%
+    .dots
+      position: absolute
+      right: 0
+      left: 0
+      bottom: 12px
+      text-align: center
+      font-size: 0
+      .dot
+        display: inline-block
+        margin: 0 4px
+        width: 8px
+        height: 8px
+        border-radius: 50%
+        background: $color-text-l
+        &.active
+          width: 20px
+          border-radius: 5px
+          background: $color-text-ll
 </style>
