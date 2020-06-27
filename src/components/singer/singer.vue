@@ -1,6 +1,8 @@
 <template>
+<!-- 歌手页面 -->
     <div class="singer">
-      <list-view :data="singers"></list-view>
+      <list-view :data="singers" @select="selectSinget"></list-view>
+      <router-view></router-view>
     </div>
 </template>
 
@@ -9,6 +11,7 @@ import { getSinger } from 'api/singer'
 import { ERR_OK } from 'api/config'
 import vPinyin from 'common/js/vue-py'
 import ListView from 'base/listview/listview'
+import { mapMutations } from 'vuex'
 
 const HOT_NAME = '热门'
 // 热门歌手个数
@@ -28,6 +31,17 @@ export default {
     this._getSinget()
   },
   methods: {
+    // 传入vuex的值
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    }),
+    // 接收到singer的实例跳转到歌手详情页面
+    selectSinget(singer) {
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      })
+      this.setSinger(singer)
+    },
     // 获取歌手列表
     _getSinget() {
       getSinger().then(res => {

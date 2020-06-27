@@ -17,6 +17,20 @@ module.exports = {
         pathRewrite: {
           '^/juzi': '/'          
         }
+      },
+      '/cyqq': {
+        target: 'https://c.y.qq.com/',
+        changeOrigin: true, 
+        pathRewrite: {
+          '^/cyqq': '/'          
+        }
+      },
+      '/yqqapi': {
+        target: 'http://111.229.20.115:8001/',
+        changeOrigin: true, 
+        pathRewrite: {
+          '^/yqqapi': '/'          
+        }
       }
     },
 

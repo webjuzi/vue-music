@@ -7,7 +7,8 @@
       <li v-for="(group, index) in data" :key="index" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
-          <li v-for="(item, index) in group.items" :key="index" class="list-group-item">
+          <li v-for="(item, index) in group.items" :key="index" class="list-group-item"
+              @click="sllectItem(item)">
             <img v-lazy="item.avatar" alt="" class="avatar">
             <span class="name">{{ item.name }}</span>
           </li>
@@ -123,6 +124,10 @@ export default {
         height += item.clientHeight
         this.listHeight.push(height)
       }
+    },
+    // 派发事件，让外部知道点击的是哪个,子传父
+    sllectItem(item) {
+      this.$emit('select', item)
     }
   },
   watch: {

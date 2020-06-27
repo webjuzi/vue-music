@@ -18,7 +18,8 @@
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "better-scroll": "^1.15.2",
-    "vue-lazyload": "^1.3.3"
+    "vue-lazyload": "^1.3.3",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
