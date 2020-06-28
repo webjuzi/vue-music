@@ -40,7 +40,10 @@ import { ERR_OK } from 'api/config'
 import Loading from 'base/loading/loading'
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
+import { playListMixin } from 'common/js/mixin'
+
 export default {
+  mixins: [playListMixin],
   data() {
     return {
       recommends: [],
@@ -89,6 +92,12 @@ export default {
         this.$refs.scroll.refresh()
         this.checkLoad = true
       }
+    },
+    // 有播放列表的时候滑动组件的底部要加bottom
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
     }
   }
 }

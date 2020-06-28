@@ -1,7 +1,7 @@
 <template>
 <!-- 歌手页面 -->
-    <div class="singer">
-      <list-view :data="singers" @select="selectSinget"></list-view>
+    <div class="singer" ref="singer">
+      <list-view :data="singers" @select="selectSinget" ref="list"></list-view>
       <router-view></router-view>
     </div>
 </template>
@@ -12,12 +12,14 @@ import { ERR_OK } from 'api/config'
 import vPinyin from 'common/js/vue-py'
 import ListView from 'base/listview/listview'
 import { mapMutations } from 'vuex'
+import { playListMixin } from 'common/js/mixin'
 
 const HOT_NAME = '热门'
 // 热门歌手个数
 const HOT_SINGER_LEN = 10
 
 export default {
+  mixins: [playListMixin],
   data() {
     return {
       singers: []
@@ -31,10 +33,6 @@ export default {
     this._getSinget()
   },
   methods: {
-    // 传入vuex的值
-    ...mapMutations({
-      setSinger: 'SET_SINGER'
-    }),
     // 接收到singer的实例跳转到歌手详情页面
     selectSinget(singer) {
       this.$router.push({
@@ -105,7 +103,17 @@ export default {
       // console.log(hot.concat(ret))
       // 合并数组
       this.singers = hot.concat(ret)
-    }
+    },
+    // 有播放列表的时候滑动组件的底部要加bottom
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.singer.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
+    // 传入vuex的值
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
   }
 }
 </script>

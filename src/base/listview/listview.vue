@@ -97,6 +97,10 @@ export default {
       let anchorIndex = parseInt(this.touch.anchorIndex) + distance
       this._scrollTo(anchorIndex)
     },
+    // 给父组件调用的，重置底部bottom
+    refresh() {
+      this.$refs.listview.refresh()
+    },
     scroll(pos) {
       this.scrollY = pos.y
     },

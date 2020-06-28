@@ -40,8 +40,9 @@ export function getSingerDetail(singerId) {
 export async function getSong(mid) {
   let url = ''
   await axios({
-    url: `/yqqapi/music/song?songmid=${mid}&guid=85640610`
+    url: `/yqqapi/music/song?songmid=${mid}&guid=85640610&lyric=1`
   }).then(res => {
+    // console.log(res)
     url = res.data
   })
   return url

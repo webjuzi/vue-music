@@ -9,7 +9,7 @@
     <!-- 背景图 -->
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div class="play" v-show="songs.length > 0" ref="playBtn">
+        <div class="play" v-show="songs.length > 0" ref="playBtn" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -22,7 +22,7 @@
     <scroll :data="songs" :probe-type="probeType" :listen-scroll="listenScroll"
             @scroll="scroll" class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" @select="selectItem"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -35,10 +35,13 @@
 import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
 import Loading from 'base/loading/loading'
+import { mapActions } from 'vuex'
+import { playListMixin } from 'common/js/mixin'
 
 const RESERVER_HEIGHT = 40
 
 export default {
+  mixins: [playListMixin],
   props: {
     bgImage: {
       type: String,
@@ -68,7 +71,36 @@ export default {
     // 返回
     back() {
       this.$router.back()
-    }
+    },
+    // 拿到子组件传递过来的参数
+    selectItem(item, index) {
+      // 调用actions里面的selectPlay并传值
+      // console.log(item, index)
+      // 传入播放器歌曲信息
+      // console.log(this.songs)
+      this.selectPlay({
+        list: this.songs,
+        index: index
+      })
+    },
+    // 随机播放全部
+    random() {
+      // 调用actions里面的randomPlay并传值
+      this.randomPlay({
+        list: this.songs
+      })
+    },
+    // 有播放列表的时候滑动组件的底部要加bottom
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
+    // vuex语法糖，直接混入actions里面的selectPlay
+    ...mapActions([
+      'selectPlay',
+      'randomPlay'
+    ])
   },
   watch: {
     // 监听scrollY

@@ -3,7 +3,7 @@ import { getSong } from 'api/singer'
 
 // 歌曲类
 export default class Song {
-  constructor({id, mid, singer, name, album, duration, image, url}) {
+  constructor({id, mid, singer, name, album, duration, image, url, lyric}) {
     this.id = id
     this.mid = mid
     this.singer = singer
@@ -13,6 +13,7 @@ export default class Song {
     this.image = image
     this.url = url
     // this.token = token
+    this.lyric = lyric
   }
 }
 
@@ -50,8 +51,10 @@ export async function createSong(musicData) {
   // getVkey(musicData.songmid)
   // 网上找的接口获取vkey和歌曲播放地址
   let songUrl = ''
+  let songLyric = ''
   await getSong(musicData.songmid).then(res => {
     songUrl = res.data.musicUrl
+    songLyric = res.data.lyric
   })
   let songs = new Song({
     id: musicData.songid,
@@ -61,8 +64,9 @@ export async function createSong(musicData) {
     album: musicData.albumname,
     duration: musicData.interval,
     image: `http://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}_1.jpg?max_age=2592000`,
-    url: songUrl
+    url: songUrl,
     // token: `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=${musicData.songmid}&filename=C400${musicData.songmid}&guid=126548448`
+    lyric: songLyric
   })
   return songs
 }

@@ -1,7 +1,9 @@
 <template>
+<!-- 歌曲列表item -->
   <div class="song-list">
     <ul>
-      <li v-for="(song, index) in songs" :key="index" class="item">
+      <li v-for="(song, index) in songs" :key="index" class="item"
+          @click.once="selectItem(songs, index)">
         <div class="content">
           <h2 class="name">{{ song.name }}</h2>
           <p class="desc">{{ getDesc(song) }}</p>
@@ -22,7 +24,13 @@ export default {
   methods: {
     // 返回名字和专辑
     getDesc(song) {
+      // console.log(song)
       return `${song.singer}.${song.album}`
+    },
+    // 点击列表的歌曲
+    selectItem(item, index) {
+      // 子传父
+      this.$emit('select', item, index)
     }
   }
 }

@@ -22,10 +22,6 @@ export default {
     MusicList
   },
   computed: {
-    // 取到vuex的值
-    ...mapGetters([
-      'singer'
-    ]),
     // 计算头像传入详情页
     title() {
       return this.singer.name
@@ -33,7 +29,11 @@ export default {
     // 计算背景图传入详情页
     bgImage() {
       return this.singer.avatar
-    }
+    },
+    // 取到vuex的值
+    ...mapGetters([
+      'singer'
+    ])
   },
   created() {
     this._getDetail()
