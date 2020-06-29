@@ -24,7 +24,6 @@ export default {
   methods: {
     // 返回名字和专辑
     getDesc(song) {
-      // console.log(song)
       return `${song.singer}.${song.album}`
     },
     // 点击列表的歌曲

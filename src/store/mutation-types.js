@@ -13,3 +13,5 @@ export const SET_SEQUENCE_LIST = 'SET_SEQUENCE_LIST'
 export const SET_MODE = 'SET_MODE'
 // 当前播放的音乐的索引
 export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX'
+// 歌单
+export const SET_DISC = 'SET_DISC'

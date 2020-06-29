@@ -3,6 +3,7 @@
   <div class="recommend" ref="recommend">
     <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
+        <!-- 轮播图 -->
         <div class="slider-wrapper" v-if="recommends.length">
           <slider>
             <div v-for="(item, index) in recommends" :key="index">
@@ -12,10 +13,12 @@
             </div>
           </slider>
         </div>
+        <!-- 推荐 -->
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="(item, index) in discList" :key="index" class="item">
+            <li v-for="(item, index) in discList" :key="index" class="item"
+                @click="selectItem(item)">
               <div class="icon">
                 <img width="60" height="60" v-lazy="item.cover" alt="">
               </div>
@@ -31,16 +34,19 @@
         <loading></loading>
       </div>
     </scroll>
+    <!-- 子路由页面 -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
+import { playListMixin } from 'common/js/mixin'
+import { mapMutations } from 'vuex'
 import Loading from 'base/loading/loading'
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
-import { playListMixin } from 'common/js/mixin'
 
 export default {
   mixins: [playListMixin],
@@ -98,7 +104,17 @@ export default {
       const bottom = playList.length > 0 ? '60px' : ''
       this.$refs.recommend.style.bottom = bottom
       this.$refs.scroll.refresh()
-    }
+    },
+    // 歌单点击事件
+    selectItem(item) {
+      this.$router.push({
+        path: `/recommend/${item.content_id}`
+      })
+      this.setDisc(item)
+    },
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    })
   }
 }
 </script>

@@ -29,6 +29,10 @@ const mutations = {
   // 当前播放的音乐的索引
   [types.SET_CURRENT_INDEX](state, index) {
     state.currentIndex = index
+  },
+  // 歌单
+  [types.SET_DISC](state, disc) {
+    state.disc = disc
   }
 }
 
