@@ -4,6 +4,11 @@
     <ul>
       <li v-for="(song, index) in songs" :key="index" class="item"
           @click.once="selectItem(songs, index)">
+        <!-- 排行 -->
+        <div class="rank" v-show="rank">
+          <span :class="getRankCls(index)">{{ getRankText(index) }}</span>
+        </div>
+        <!-- 名字 歌曲名 -->
         <div class="content">
           <h2 class="name">{{ song.name }}</h2>
           <p class="desc">{{ getDesc(song) }}</p>
@@ -19,6 +24,10 @@ export default {
     songs: {
       type: Array,
       default: () => []
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -30,6 +39,22 @@ export default {
     selectItem(item, index) {
       // 子传父
       this.$emit('select', item, index)
+    },
+    // 排行序列号样式
+    getRankCls(index) {
+      // 前三个index显示图标
+      if (index <= 2) {
+        return `icon icon${index}`
+      } else {
+        // 之后的显示数字
+        return 'text'
+      }
+    },
+    // 排行序列号文案
+    getRankText(index) {
+      if (index > 2) {
+        return index + 1
+      }
     }
   }
 }

@@ -33,6 +33,10 @@ const mutations = {
   // 歌单
   [types.SET_DISC](state, disc) {
     state.disc = disc
+  },
+  // 排行榜单
+  [types.SET_TOP_LIST](state, topList) {
+    state.topList = topList
   }
 }
 
