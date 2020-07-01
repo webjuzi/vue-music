@@ -17,3 +17,5 @@ export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX'
 export const SET_DISC = 'SET_DISC'
 // 排行榜单
 export const SET_TOP_LIST = 'SET_TOP_LIST'
+// 搜索历史
+export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'

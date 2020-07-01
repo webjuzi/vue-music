@@ -21,3 +21,5 @@ export const currentSong = (state) => {
 export const disc = state => state.disc
 // 歌单
 export const topList = state => state.topList
+// 搜索历史
+export const searchHistory = state => state.searchHistory

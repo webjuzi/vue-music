@@ -23,6 +23,14 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    pullup: {
+      type: Boolean,
+      default: false
+    },
+    beforeScrool: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -46,6 +54,23 @@ export default {
         let me = this
         this.scroll.on('scroll', (pos) => {
           me.$emit('scroll', pos)
+        })
+      }
+      // 上拉到底部刷新数据
+      if (this.pullup) {
+        this.scroll.on('scrollEnd', () => {
+          // console.log(this.scroll.y)
+          // console.log('max:' + (this.scroll.maxScrollY))
+          if (this.scroll.y <= this.scroll.maxScrollY - 5) {
+            this.$emit('scrollToEnd')
+            // this.scroll.maxScrollY += 200
+          }
+        })
+      }
+      // 是否滑动的时候隐藏键盘
+      if (this.beforeScrool) {
+        this.scroll.on('beforeScroolStart', () => {
+          this.$emit('beforeScrool')
         })
       }
     },
@@ -80,5 +105,4 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-</style>
+<style scoped lang="stylus" rel="stylesheet/stylus"></style>

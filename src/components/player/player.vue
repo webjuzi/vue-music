@@ -513,6 +513,15 @@ export default {
       // 动画时间
       this.$refs.lyricList.style[transitionDuration] = '300ms'
     },
+    // 判断是否获取到歌曲地址源
+    ifMusicUrl() {
+      if (this.currentSong.url === 'https://ws.stream.qqmusic.qq.com/' || this.currentSong.url.length < 70) {
+        // 没有获取到播放地址源，切换下一首
+        this.next()
+        this.ifMusicUrl()
+        console.log('歌曲地址未获取到。')
+      }
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
@@ -534,6 +543,7 @@ export default {
       }
       // 播放
       setTimeout(() => {
+        this.ifMusicUrl()
         this.$refs.audio.play()
         // 处理歌词
         this.getLyric()
