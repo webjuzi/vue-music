@@ -1,6 +1,6 @@
 // 1
 import { playMode } from 'common/js/config'
-import { loadSearch, loadPlay } from 'common/js/cache'
+import { loadSearch, loadPlay, loadFavorite } from 'common/js/cache'
 
 const state = {
   singer: {}, // 歌手
@@ -13,7 +13,8 @@ const state = {
   disc: {}, // 歌单
   topList: {}, // 排行榜单
   searchHistory: loadSearch(), // 搜索历史初始值
-  playHistory: loadPlay() // 播放历史初始值
+  playHistory: loadPlay(), // 播放历史初始值
+  favoriteList: loadFavorite() // 我喜欢的
 }
 
 export default state

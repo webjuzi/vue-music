@@ -85,9 +85,10 @@
             <div class="icon i-right" :class="disableCls">
               <i class="icon-next" @click="next"></i>
             </div>
-            <!-- 收藏 -->
+            <!-- 我喜欢的 -->
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i class="icon" :class="getFavoriteIcon(currentSong)"
+                              @click="toggleFavorite(currentSong)"></i>
             </div>
           </div>
         </div>

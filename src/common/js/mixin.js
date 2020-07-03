@@ -36,7 +36,8 @@ export const plyerMixin = {
       'sequenceList',
       'currentSong',
       'playList',
-      'mode'
+      'mode',
+      'favoriteList'
     ])
   },
   methods: {
@@ -63,12 +64,37 @@ export const plyerMixin = {
       })
       this.setCurrentIndex(index)
     },
+    // 我喜欢的Icon获取
+    getFavoriteIcon(song) {
+      if (this.isFavorite(song)) {
+        return 'icon-favorite'
+      }
+      return 'icon-not-favorite'
+    },
+    // 我喜欢的点击事件
+    toggleFavorite(song) {
+      if (this.isFavorite(song)) {
+        this.deleteFavoriteList(song)
+        return
+      }
+      this.saveFavoriteList(song)
+    },
+    isFavorite(song) {
+      const index = this.favoriteList.findIndex(item => {
+        return item.id === song.id
+      })
+      return index > -1
+    },
     ...mapMutations({
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
       setMode: 'SET_MODE',
       setPlayList: 'SET_PLAY_LIST'
-    })
+    }),
+    ...mapActions([
+      'saveFavoriteList',
+      'deleteFavoriteList'
+    ])
   }
 }
 

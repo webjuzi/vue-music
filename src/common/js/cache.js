@@ -9,6 +9,9 @@ const SEARCH_MAX_LENGTH = 15
 const PLAY_KEY = '__play__'
 // 最多两百首歌曲
 const PLAY_MAX_LENGTH = 100
+// 我喜欢的
+const FAVORITE_KEY = '__favorite__'
+const FAVORITE_MAX_LENGTH = 200
 
 export function saveSearch(query) {
   // 获取缓存中的列表
@@ -90,4 +93,30 @@ export function savePlay(song) {
 // 读取最近播放
 export function loadPlay() {
   return storage.get(PLAY_KEY, [])
+}
+
+// 保存到我喜欢的
+export function saveFavorite(song) {
+  // 拿到当前的列表,没有就定义一个空数组
+  let songs = storage.get(FAVORITE_KEY, [])
+  inserArray(songs, song, (item) => {
+    return item.id === song.id
+  }, FAVORITE_MAX_LENGTH)
+  storage.set(FAVORITE_KEY, songs)
+  return songs
+}
+
+// 从我的喜欢删除
+export function deleteFavorite(song) {
+  let songs = storage.get(FAVORITE_KEY, [])
+  deleteFromArray(songs, (item) => {
+    return item.id === song.id
+  })
+  storage.set(FAVORITE_KEY, songs)
+  return songs
+}
+
+// 初始我的喜欢
+export function loadFavorite() {
+  return storage.get(FAVORITE_KEY, [])
 }

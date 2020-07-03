@@ -25,3 +25,5 @@ export const topList = state => state.topList
 export const searchHistory = state => state.searchHistory
 // 搜索历史
 export const playHistory = state => state.playHistory
+// 我喜欢的
+export const favoriteList = state => state.favoriteList
