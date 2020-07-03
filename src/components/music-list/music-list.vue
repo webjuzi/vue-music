@@ -22,7 +22,7 @@
     <scroll :data="songs" :probe-type="probeType" :listen-scroll="listenScroll"
             @scroll="scroll" class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem" :rank="rank"></song-list>
+        <song-list :songs="songs" @select="selectItem" :rank="rank" :rankIco="rankIco"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -56,6 +56,10 @@ export default {
       default: ''
     },
     rank: {
+      type: Boolean,
+      default: false
+    },
+    rankIco: {
       type: Boolean,
       default: false
     }

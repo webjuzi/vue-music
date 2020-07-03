@@ -110,11 +110,12 @@
             <i :class="miniInco" @click.stop="togglePlaying" class="icon-mini"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <playlist ref="playlist" class="playlist"></playlist>
     <!-- 播放音乐 -->
     <audio :src="currentSong.url" ref="audio"
           @canplay="ready"
@@ -125,21 +126,23 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import animations from 'create-keyframe-animation'
 import {prefixStyle} from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import { playMode } from 'common/js/config'
-import { shuffle } from 'common/js/util'
 import Lyric from 'lyric-parser'
 import Scroll from 'base/scroll/scroll'
+import Playlist from 'components/playlist/playlist'
+import { plyerMixin } from 'common/js/mixin'
 
 // 根据浏览器选择transform的名称和动画时间
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 
 export default {
+  mixins: [plyerMixin],
   data() {
     return {
       songReady: false, // 未加载好歌曲按钮变灰
@@ -161,7 +164,9 @@ export default {
     // 迷你播放器进度条
     ProgressCircle,
     // 滚动组件
-    Scroll
+    Scroll,
+    // 列表组件
+    Playlist
   },
   computed: {
     // 计算应该显示的图标（播放状态）
@@ -184,18 +189,12 @@ export default {
       return this.currentTime / this.currentSong.duration
     },
     // 播放模式图标切换
-    iconMode() {
-      return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-    },
+    // 当mixin里面了
     // 混入Vuex
     ...mapGetters([
       'fullScreen',
-      'playList',
-      'currentSong',
       'playing',
-      'currentIndex',
-      'mode',
-      'sequenceList'
+      'currentIndex'
     ])
   },
   methods: {
@@ -347,6 +346,8 @@ export default {
     // 是否加载完，否的情况下不能切歌
     ready() {
       this.songReady = true
+      // 写入播放历史
+      this.savePlayHistory(this.currentSong)
     },
     // 在歌曲未加载出来触发
     error() {
@@ -391,29 +392,7 @@ export default {
       }
     },
     // 切换播放状态
-    changeMode() {
-      const mode = (this.mode + 1) % 3
-      // 设置mode
-      this.setMode(mode)
-      let list = null
-      // 随机播放打乱列表
-      if (mode === playMode.random) {
-        list = shuffle(this.sequenceList)
-      } else {
-        // 单曲循环和列表循环不需要打乱
-        list = this.sequenceList
-      }
-      this.setPlayList = list
-      // 切换列表保证当前歌曲不变
-      this.resetCurrentIndex(list)
-    },
-    // 切换列表保证当前歌曲不变
-    resetCurrentIndex(list) {
-      let index = list.findIndex((item) => {
-        return item.id === this.currentSong.id
-      })
-      this.setCurrentIndex(index)
-    },
+    // 放mixin了
     // 当前歌曲播放完毕
     end() {
       // 判断是否是单曲循环模式
@@ -515,24 +494,30 @@ export default {
     },
     // 判断是否获取到歌曲地址源
     ifMusicUrl() {
-      if (this.currentSong.url === 'https://ws.stream.qqmusic.qq.com/' || this.currentSong.url.length < 70) {
+      if (this.currentSong.url === 'https://ws.stream.qqmusic.qq.com/') {
         // 没有获取到播放地址源，切换下一首
         this.next()
         this.ifMusicUrl()
         console.log('歌曲地址未获取到。')
       }
     },
+    // 显示播放列表
+    showPlaylist() {
+      this.$refs.playlist.show()
+    },
     ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setMode: 'SET_MODE',
-      setPlayList: 'SET_PLAY_LIST'
-    })
+      setFullScreen: 'SET_FULL_SCREEN'
+    }),
+    ...mapActions([
+      'savePlayHistory'
+    ])
   },
   watch: {
     // 监听currentSong
     currentSong(newSong, oldSong) {
+      if (!newSong.id) {
+        return
+      }
       // 歌曲id不变就不触发下面操作
       if (newSong.id === oldSong.id) {
         return
@@ -673,7 +658,8 @@ export default {
             color: $color-text-l
             font-size: $font-size-medium
             &.current
-              color: $color-text
+              color: #eabf38
+              font-weight 700
     .bottom
       position: absolute
       bottom: 50px
@@ -746,7 +732,6 @@ export default {
     display: flex
     align-items: center
     position: fixed
-    left: 0
     bottom: 0
     z-index: 180
     width: 100%
@@ -794,6 +779,10 @@ export default {
         position: absolute
         left: 0
         top: 0
+  .playlist
+    max-width: 540px!important
+    min-width: 320px!important
+    margin: 0 auto!important
 
 @keyframes rotate
   0%

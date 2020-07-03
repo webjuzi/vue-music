@@ -48,6 +48,10 @@ export default {
       type: String,
       default: ''
     },
+    zhida: {
+      type: Number,
+      default: 1 // 是否有直达内容，1有 0没有
+    },
     num: {
       type: Number,
       default: 20 // 一页多少数据
@@ -71,7 +75,7 @@ export default {
     // 请求数据
     _search() {
       this.$refs.suggest.scrollTo(0, 0)
-      search(this.query, this.page, this.num).then(res => {
+      search(this.query, this.page, this.num, this.zhida).then(res => {
         // 处理数据
         this._genResult(res.data)
         // 计算是否还有更多的数据

@@ -2,7 +2,7 @@
 import * as types from './mutation-types'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/util'
-import { saveSearch, deleteSearch, clearSearch } from 'common/js/cache'
+import { saveSearch, deleteSearch, clearSearch, savePlay } from 'common/js/cache'
 
 // 默认播放配置
 export const selectPlay = function({commit, state}, {list, index}) {
@@ -106,4 +106,47 @@ export const deleteSearchHistory = function ({commit}, query) {
 // 删除全部
 export const clearSearchHistory = function ({commit}) {
   commit(types.SET_SEARCH_HISTORY, clearSearch())
+}
+
+// 保存历史歌曲
+export const savePlayHistory = function ({commit}, song) {
+  commit(types.SET_PLAY_HISTORY, savePlay(song))
+}
+
+// --------------------------------------------
+
+// 删除列表歌曲
+export const deleteSong = function ({commit, state}, song) {
+  // 播放列表
+  let playList = state.playList.slice()
+  // 顺序列表
+  let sequenceList = state.sequenceList.slice()
+  // 当前播放的音乐的索引
+  let currentIndex = state.currentIndex
+  // 判断当前列表要删除的这首歌曲
+  let pIndex = findIndex(playList, song)
+  // 删除
+  playList.splice(pIndex, 1)
+  // 找到index
+  let sIndex = findIndex(sequenceList, song)
+  // 删除
+  sequenceList.splice(sIndex, 1)
+  // 当前播放的歌曲在要删除的歌曲的后面
+  if (currentIndex > pIndex || currentIndex === playList.length) {
+    // 当前歌曲的index--
+    currentIndex--
+  }
+  commit(types.SET_PLAY_LIST, playList)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
+  commit(types.SET_CURRENT_INDEX, currentIndex)
+  const playingState = playList.length > 0
+  commit(types.SET_PLAYING_STATE, playingState)
+}
+
+// 删除全部
+export const deleteSongList = function ({commit}) {
+  commit(types.SET_PLAY_LIST, [])
+  commit(types.SET_SEQUENCE_LIST, [])
+  commit(types.SET_CURRENT_INDEX, -1)
+  commit(types.SET_PLAYING_STATE, false)
 }

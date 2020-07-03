@@ -3,7 +3,7 @@
   <div class="song-list">
     <ul>
       <li v-for="(song, index) in songs" :key="index" class="item"
-          @click.once="selectItem(songs, index)">
+          @click.once="selectItem(song, index)">
         <!-- 排行 -->
         <div class="rank" v-show="rank">
           <span :class="getRankCls(index)">{{ getRankText(index) }}</span>
@@ -28,6 +28,10 @@ export default {
     rank: {
       type: Boolean,
       default: false
+    },
+    rankIco: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -43,7 +47,7 @@ export default {
     // 排行序列号样式
     getRankCls(index) {
       // 前三个index显示图标
-      if (index <= 2) {
+      if (index <= 2 && this.rankIco) {
         return `icon icon${index}`
       } else {
         // 之后的显示数字
@@ -52,7 +56,11 @@ export default {
     },
     // 排行序列号文案
     getRankText(index) {
-      if (index > 2) {
+      if (this.rankIco) {
+        if (index > 2) {
+          return index + 1
+        }
+      } else {
         return index + 1
       }
     }
@@ -65,18 +73,20 @@ export default {
   @import "~common/stylus/mixin"
 
   .song-list
+    height 100%
+    overflow hidden
     .item
-      display: flex
       align-items: center
       box-sizing: border-box
       height: 64px
       font-size: $font-size-medium
       .rank
-        flex: 0 0 25px
-        width: 25px
-        margin-right: 30px
+        position relative
+        width 100%
         text-align: center
         .icon
+          position absolute
+          left 0
           display: inline-block
           width: 25px
           height: 24px
@@ -88,10 +98,12 @@ export default {
           &.icon2
             bg-image('third')
         .text
+          position absolute
+          left 0
           color: $color-theme
           font-size: $font-size-large
       .content
-        flex: 1
+        margin-left 30px
         line-height: 20px
         overflow: hidden
         .name

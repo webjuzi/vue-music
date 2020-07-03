@@ -1,7 +1,7 @@
 <template>
 <!-- 点开排行榜 -->
   <transition name="slide" appear>
-    <music-list :songs="songs" :title="title" :bgImage="bgImage" :rank="rank"></music-list>
+    <music-list :songs="songs" :title="title" :bgImage="bgImage" :rank="rank" :rankIco="rankIco"></music-list>
   </transition>
 </template>
 
@@ -16,7 +16,8 @@ export default {
   data() {
     return {
       songs: [],
-      rank: true
+      rank: true,
+      rankIco: true
     }
   },
   created() {

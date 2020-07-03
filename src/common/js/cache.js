@@ -1,9 +1,14 @@
 // local Storage
 import storage from 'good-storage'
 
+// 搜索的Key
 const SEARCH_KEY = '__search__'
 // 最多保存的数据条数
 const SEARCH_MAX_LENGTH = 15
+// 播放的Key
+const PLAY_KEY = '__play__'
+// 最多两百首歌曲
+const PLAY_MAX_LENGTH = 100
 
 export function saveSearch(query) {
   // 获取缓存中的列表
@@ -66,4 +71,23 @@ function deleteFromArray(arr, compare) {
   if (index > -1) {
     arr.splice(index, 1)
   }
+}
+
+// 最近播放保存
+export function savePlay(song) {
+  // 查询有没有这个key，没有就定义一个空数组
+  let songs = storage.get(PLAY_KEY, [])
+  // 插入
+  inserArray(songs, song, (item) => {
+    // 如果已经存在就调整到最前面
+    return item.id === song.id
+  }, PLAY_MAX_LENGTH)
+  // 保存到本地
+  storage.set(PLAY_KEY, songs)
+  return songs
+}
+
+// 读取最近播放
+export function loadPlay() {
+  return storage.get(PLAY_KEY, [])
 }

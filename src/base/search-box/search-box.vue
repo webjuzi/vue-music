@@ -17,7 +17,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: '搜索歌曲'
+      default: '搜索歌手、歌曲'
     }
   },
   data() {

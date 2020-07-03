@@ -51,10 +51,12 @@ export default {
     &.list-enter, &.list-leave-to
       height 0
     .text
+      margin-left 20px
       font-size 14px
       flex 1
-      color #666666
+      color #999999
     .icon
+      margin-right 20px
       extend-click()
       .icon-delete
         font-size $font-size-small

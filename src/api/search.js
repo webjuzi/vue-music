@@ -15,10 +15,10 @@ export function getHotKey() {
 }
 
 // 搜索内容
-export async function search(query, page, num) {
+export async function search(query, page, num, zhida) {
   let data = []
   await axios({
-    url: `/yqqapi/music/list?w=${query}&p=${page}&n=${num}&catZhida=1`
+    url: `/yqqapi/music/list?w=${query}&p=${page}&n=${num}&catZhida=${zhida}`
   }).then(res => {
     data = res.data
   })

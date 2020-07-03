@@ -31,6 +31,10 @@ export default {
     beforeScrool: {
       type: Boolean,
       default: false
+    },
+    refreshDelay: {
+      type: Number,
+      default: 20
     }
   },
   mounted() {
@@ -99,7 +103,7 @@ export default {
       setTimeout(() => {
         // 初始化
         this._initScroll()
-      }, 20)
+      }, this.refreshDelay)
     }
   }
 }

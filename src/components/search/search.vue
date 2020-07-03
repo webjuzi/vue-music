@@ -10,7 +10,8 @@
          ref="shortcutWrapper">
       <scroll class="shortcut"
               :data="shorcut"
-              ref="shortcut">
+              ref="shortcut"
+              :refreshDelay="120">
         <div>
           <div class="hot-key">
             <h1 class="title">热门搜索</h1>
@@ -63,21 +64,19 @@ import SearchBox from 'base/search-box/search-box'
 import { getHotKey } from 'api/search'
 import { ERR_OK } from 'api/config'
 import Suggest from 'components/suggest/suggest'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import SearchList from 'base/search-list/search-list'
-import Confirm from 'base/confirm/Confirm'
+import Confirm from 'base/confirm/confirm'
 import Scroll from 'base/scroll/scroll'
-import { playListMixin } from 'common/js/mixin'
+import { playListMixin, searchMixin } from 'common/js/mixin'
 
 export default {
-  mixins: [playListMixin],
+  mixins: [playListMixin, searchMixin],
   data() {
     return {
       hotKey: [], // 热门关键词
-      query: '', // 搜索关键词
       num: 20, // 一次搜索多少数据
-      text:
-        '确定要<span style="color: #ffcd32;font-whigh: 700;font-size: 20px"> 清空所有 </span>搜索记录' // 删除历史搜索框的默认文字
+      text: '确定要<span style="color: #ffcd32;font-whigh: 700;font-size: 20px"> 清空所有 </span>搜索记录' // 删除历史搜索框的默认文字
     }
   },
   created() {
@@ -92,25 +91,6 @@ export default {
           this.hotKey = res.data.hotkey.slice(0, 12)
         }
       })
-    },
-    // 调用searchBox的接口改变query的值
-    addQuery(query) {
-      this.$refs.searchBox.setQuery(query)
-    },
-    // 监听管检测的变化
-    onQueryChange(query) {
-      this.query = query
-    },
-    blurInput() {
-      this.$refs.searchBox.blur()
-    },
-    // 保存搜索结果
-    saveSearch() {
-      this.saveSearchHistory(this.query)
-    },
-    // 删除一条搜索记录
-    deleteOne(item) {
-      this.deleteSearchHistory(item)
     },
     // 删除全部搜索记录
     deleteAll() {
@@ -130,8 +110,6 @@ export default {
       this.$refs.suggest.refresh()
     },
     ...mapActions([
-      'saveSearchHistory',
-      'deleteSearchHistory',
       'clearSearchHistory'
     ])
   },
@@ -139,8 +117,7 @@ export default {
     // 传给scroll计算滚动范围
     shorcut() {
       return this.hotKey.concat(this.searchHistory)
-    },
-    ...mapGetters(['searchHistory'])
+    }
   },
   components: {
     SearchBox,
