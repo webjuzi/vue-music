@@ -53,9 +53,9 @@ export const plyerMixin = {
         // 单曲循环和列表循环不需要打乱
         list = this.sequenceList
       }
-      this.setPlayList = list
       // 切换列表保证当前歌曲不变
       this.resetCurrentIndex(list)
+      this.setPlayList(list)
     },
     // 切换列表保证当前歌曲不变
     resetCurrentIndex(list) {
@@ -73,6 +73,7 @@ export const plyerMixin = {
     },
     // 我喜欢的点击事件
     toggleFavorite(song) {
+      console.log('点了收藏')
       if (this.isFavorite(song)) {
         this.deleteFavoriteList(song)
         return

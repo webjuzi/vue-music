@@ -53,8 +53,10 @@ export async function createSong(musicData) {
   let songUrl = ''
   let songLyric = ''
   await getSong(musicData.songmid).then(res => {
-    songUrl = res.data.musicUrl
-    songLyric = res.data.lyric
+    if (res.data) {
+      songUrl = res.data.musicUrl
+      songLyric = res.data.lyric
+    }
   })
   let songs = new Song({
     id: musicData.songid,

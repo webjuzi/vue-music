@@ -2,7 +2,7 @@
 
 import jsonp from 'common/js/jsonp'
 import { axios } from 'common/js/axios'
-import { commonParams } from './config'
+import { commonParams, juzi } from './config'
 
 // 轮播图数据
 export async function getRecommend() {
@@ -10,7 +10,7 @@ export async function getRecommend() {
   let lbtUrl = ''
   // 从我的服务器获取QQ音乐的接口url
   await axios({
-    url: '/juzi/recommend'
+    url: `${juzi}/recommend`
   }).then(res => {
     lbtUrl = res.data.url[0]
   })
@@ -33,7 +33,7 @@ export async function getDiscList() {
   let hotUrl = ''
   // 从我的服务器获取QQ音乐的接口url
   await axios({
-    url: '/juzi/recommend'
+    url: `${juzi}/recommend`
   }).then(res => {
     hotUrl = res.data.url[0]
   })
@@ -59,7 +59,9 @@ export async function getDiscList() {
 // }
 
 export function getSongList(disstid) {
-  const url = `/juzi/api/getDiscList?disstid=${disstid}`
+  // const url = `/juzi/api/getDiscList?disstid=${disstid}`
+  const url = `${juzi}/api/getDiscList?disstid=${disstid}`
+  // url: 'http://www.111.229.20.115:5859/recommend'
   const data = Object.assign({}, commonParams, {
     // platform: 'yqq',
     // hostUin: 0,

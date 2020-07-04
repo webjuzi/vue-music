@@ -3,11 +3,66 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="keywords" content="周永举,个人博客,个人网站,Vue,免费小说,txt下载,热门小说,电子书,看小说,都市修真,玄幻小说">
+    <meta name="description" content="www.zhouyongju.com/ebook，一个90后前端开发工程师的实验基地，全方位展示各种最新的电子书，提供资源的展示以及下载等等。此网站将会不定期运用各种前沿技术升级，望多留言提宝贵意见！">
+    <meta baidu-gxt-verify-token="09853849afca191c93ea21b3cdadb1b2">
     <title>橘子音悦</title>
     <link rel="shortcut icon" href="http://www.zhouyongju.com/music/resource/default.png" type="image/x-icon" />
     <!-- PC端居中显示 -->
     <link rel="stylesheet" href="http://www.zhouyongju.com/orange/css/musicPc.css">
     </style>
+    <script>
+      function search(){
+        window.open("http://www.baidu.com/s?wd="+$("#input").val());
+      }
+      document.onkeydown = function(event) {
+      var e = event || window.event || arguments.callee.caller.arguments[0];
+          if (e && e.keyCode == 13) { 
+          search();
+            }
+        };
+    </script>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?de8658b669b6209fa589ee2de95dacf1";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    <script>
+			document.addEventListener('plusready', function() {
+				var webview = plus.webview.currentWebview();
+				plus.key.addEventListener('backbutton', function() {
+					webview.canBack(function(e) {
+						if (e.canBack) {
+							webview.back();
+						} else {
+							//webview.close(); //hide,quit
+							//plus.runtime.quit();
+							//首页返回键处理
+							//处理逻辑：1秒内，连续两次按返回键，则退出应用；
+							var first = null;
+							plus.key.addEventListener('backbutton', function() {
+								//首次按键，提示‘再按一次退出应用’
+								if (!first) {
+									first = new Date().getTime();
+									console.log('再按一次退出应用');
+									setTimeout(function() {
+										first = null;
+									}, 1000);
+								} else {
+									if (new Date().getTime() - first < 1500) {
+										plus.runtime.quit();
+									}
+								}
+							}, false);
+						}
+					})
+				});
+			});
+		</script>
   </head>
   <body>
     <div class="phone">

@@ -2,7 +2,7 @@
 
 import jsonp from 'common/js/jsonp'
 import { axios } from 'common/js/axios'
-import {commonParams, options} from './config'
+import {commonParams, options, juzi, yqqapi} from './config'
 // import { commonParameters } from './config'
 
 // 轮播图数据
@@ -11,7 +11,7 @@ export async function getSinger() {
   let singerUrl = ''
   // 从我的服务器获取QQ音乐的接口url
   await axios({
-    url: '/juzi/singer'
+    url: `${juzi}/singer`
   }).then(res => {
     singerUrl = res.data.url[0]
     console.log()
@@ -40,7 +40,7 @@ export function getSingerDetail(singerId) {
 export async function getSong(mid) {
   let url = ''
   await axios({
-    url: `/yqqapi/music/song?songmid=${mid}&guid=85640610&lyric=1`
+    url: `${yqqapi}/music/song?songmid=${mid}&guid=85640610&lyric=1`
   }).then(res => {
     // console.log(res)
     url = res.data

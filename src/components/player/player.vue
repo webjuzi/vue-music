@@ -119,7 +119,7 @@
     <playlist ref="playlist" class="playlist"></playlist>
     <!-- 播放音乐 -->
     <audio :src="currentSong.url" ref="audio"
-          @canplay="ready"
+          @play="ready"
           @error="error"
           @timeupdate="updateTime"
           @ended="end"></audio>
@@ -296,6 +296,7 @@ export default {
       // 处理只有一首歌点上一曲
       if (this.playList.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex - 1
         if (index === -1) {
@@ -319,6 +320,7 @@ export default {
       // 处理只有一首歌点下一曲
       if (this.playList.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex + 1
         if (index === this.playList.length) {

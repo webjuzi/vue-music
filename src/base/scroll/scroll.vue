@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
 export default {
   props: {
@@ -28,7 +28,7 @@ export default {
       type: Boolean,
       default: false
     },
-    beforeScrool: {
+    beforeScroll: {
       type: Boolean,
       default: false
     },
@@ -56,7 +56,7 @@ export default {
       // 当需要监听滑动的时候
       if (this.listenScroll) {
         let me = this
-        this.scroll.on('scroll', (pos) => {
+        this.scroll.on('scroll', pos => {
           me.$emit('scroll', pos)
         })
       }
@@ -72,9 +72,9 @@ export default {
         })
       }
       // 是否滑动的时候隐藏键盘
-      if (this.beforeScrool) {
-        this.scroll.on('beforeScroolStart', () => {
-          this.$emit('beforeScrool')
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll')
         })
       }
     },
@@ -102,7 +102,7 @@ export default {
     data() {
       setTimeout(() => {
         // 初始化
-        this._initScroll()
+        this.refresh()
       }, this.refreshDelay)
     }
   }

@@ -15,20 +15,20 @@
           </h1>
         </div>
         <!-- 中间列表 -->
-        <scroll class="list-content" :data="sequenceList" ref="listContent" :refreshDelay="120">
-          <ul>
-            <li class="item" v-for="(item, index) in sequenceList" :key="index"
-                @click="selectItem(item, index)" ref="listItem">
+        <scroll ref="listContent" :data="sequenceList" class="list-content" :refreshDelay="120">
+          <transition-group name="list" tag="ul">
+            <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList"
+                @click="selectItem(item,index)">
               <i class="current" :class="getCurrentIcon(item)"></i>
-              <span class="text">{{ item.name }}</span>
-              <span class="like" @click.stop="toggleFavorite(item)">
+              <span class="text">{{item.name}}</span>
+              <span @click.stop="toggleFavorite(item)" class="like">
                 <i :class="getFavoriteIcon(item)"></i>
               </span>
-              <span class="delete" @click.stop="deleteOne(item)">
+              <span @click.stop="deleteOne(item)" class="delete">
                 <i class="icon-delete"></i>
               </span>
             </li>
-          </ul>
+          </transition-group>
         </scroll>
         <!-- 添加个区到队列 -->
         <div class="list-operate">

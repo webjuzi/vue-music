@@ -62,7 +62,10 @@ export default {
         if (musicData.songid && musicData.albummid) {
           // ret.push(createSong(musicData))
           createSong(musicData).then(res => {
-            ret.push(res)
+            // 收费歌曲获取不到url过滤
+            if (res.url.length > 50) {
+              ret.push(res)
+            }
           })
         }
       })

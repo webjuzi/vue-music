@@ -100,7 +100,10 @@ export default {
       list.forEach(musicData => {
         if (musicData.songid && musicData.albumid) {
           createSong(musicData).then(res => {
-            this.result.push(res)
+            // 收费歌曲获取不到url过滤
+            if (res.url.length > 50) {
+              this.result.push(res)
+            }
             // console.log(this.result, 1)
           })
         }

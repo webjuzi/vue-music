@@ -2,7 +2,7 @@
 
 import jsonp from 'common/js/jsonp'
 import { axios } from 'common/js/axios'
-import {commonParams, options} from './config'
+import {commonParams, options, juzi} from './config'
 
 // 排行榜单
 export async function getTopList() {
@@ -12,7 +12,7 @@ export async function getTopList() {
   let needNewCode = ''
   let platform = ''
   await axios({
-    url: '/juzi/top'
+    url: `${juzi}/top`
   }).then(res => {
     topUrl = res.data.url[0]
     uin = res.data.url[1]
@@ -34,7 +34,7 @@ export async function getMusicList(topid) {
     topid: topid
   })
   await axios({
-    url: '/juzi/toplist'
+    url: `${juzi}/toplist`
   }).then(res => {
     toplistUrl = res.data.url[0]
   })
