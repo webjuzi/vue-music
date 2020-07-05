@@ -12,10 +12,10 @@ export const options = {
 
 export const ERR_OK = 0
 
-// 开发环境
-export const juzi = '/juzi'
-export const yqqapi = '/yqqapi'
+// // 开发环境
+// export const juzi = '/juzi'
+// export const yqqapi = '/yqqapi'
 
-// // 生产环境
-// export const juzi = 'http://111.229.20.115:5859'
-// export const yqqapi = 'http://111.229.20.115:8001/'
+// 生产环境
+export const juzi = 'http://111.229.20.115:5859'
+export const yqqapi = 'http://111.229.20.115:8001'

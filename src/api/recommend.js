@@ -6,17 +6,18 @@ import { commonParams, juzi } from './config'
 
 // 轮播图数据
 export async function getRecommend() {
-  const data = ''
-  let lbtUrl = ''
+  // const data = ''
+  // let lbtUrl = ''
   // 从我的服务器获取QQ音乐的接口url
+  let lbt = {}
   await axios({
-    url: `${juzi}/recommend`
+    url: `${juzi}/lbt`
   }).then(res => {
-    lbtUrl = res.data.url[0]
+    lbt = res.data
   })
 
   // 拿到接口去QQ音乐获取数据
-  return jsonp(lbtUrl, data)
+  return lbt
 
   // const data = Object.assign({}, commonParameters, {
   //   loginUin: '85640610',

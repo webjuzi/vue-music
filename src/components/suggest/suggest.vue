@@ -133,6 +133,7 @@ export default {
     },
     // 列表点击事件
     selectItem(item) {
+      console.log(item)
       if (item.type) {
         // 是一个歌手
         const singer = new Singer({
