@@ -448,10 +448,13 @@ export default {
       const touch = e.touches[0]
       const deltaX = touch.pageX - this.touch.startX
       const deltaY = touch.pageY - this.touch.startY
-      // Y周移动距离大于X轴移动距离就什么都不做
+      // Y轴移动距离大于X轴移动距离就什么都不做
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        // 当Y轴移动多余X轴就标记下不需要切换页面
+        this.touch.isCut = 'no'
         return
       }
+      this.touch.isCut = 'yes'
       // cd页面left=0  歌词页面left=一个屏幕的宽度
       const left = this.currentShow === 'cd' ? 0 : -window.innerWidth
       // [0, left] 移动的距离
@@ -490,10 +493,14 @@ export default {
           offsetwidth = -window.innerWidth
         }
       }
-      // 根据最终确定的offsetwidth移动
-      this.$refs.lyricList.style[transform] = `translate3d(${offsetwidth}px, 0, 0)`
-      // 动画时间
-      this.$refs.lyricList.style[transitionDuration] = '300ms'
+      // console.log(this.touch.isCut)
+      // 判断是否满足切换页面的条件
+      if (this.touch.isCut === 'yes') {
+        // 根据最终确定的offsetwidth移动
+        this.$refs.lyricList.style[transform] = `translate3d(${offsetwidth}px, 0, 0)`
+        // 动画时间
+        this.$refs.lyricList.style[transitionDuration] = '300ms'
+      }
     },
     // 判断是否获取到歌曲地址源
     ifMusicUrl() {
@@ -531,10 +538,14 @@ export default {
       }
       // 播放
       setTimeout(() => {
+        // 判断是否获得歌曲播放源
         this.ifMusicUrl()
+        // 播放
         this.$refs.audio.play()
         // 处理歌词
         this.getLyric()
+        // 重置下播放的进度，解决第一首歌歌词延时的情况
+        this.$refs.audio.currentTime = 0
       }, 1000)
     },
     // 监听播放状态Vuex

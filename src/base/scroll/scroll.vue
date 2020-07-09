@@ -8,30 +8,37 @@
 import BScroll from 'better-scroll'
 export default {
   props: {
+    // 有时候我们需要知道滚动的位置。当 probeType 为 1 的时候，会非实时（屏幕滑动超过一定时间后）派发scroll 事件；当 probeType 为 2 的时候，会在屏幕滑动的过程中实时的派发 scroll 事件；当 probeType 为 3 的时候，不仅在屏幕滑动的过程中，而且在 momentum 滚动动画运行过程中实时派发 scroll 事件。
     probeType: {
       type: Number,
       default: 1
     },
+    // 作用：better-scroll 默认会阻止浏览器的原生 click 事件。当设置为 true，better-scroll 会派发一个 click 事件，我们会给派发的 event 参数加一个私有属性 _constructed，值为 true。但是自定义的 click 事件会阻止一些原生组件的行为，如 checkbox 的选中等，所以一旦滚动列表中有一些原生表单组件，推荐的做法是监听 tap 事件，如下。
     click: {
       type: Boolean,
       default: true
     },
+    // 数据
     data: {
       type: Array,
       default: null
     },
+    // 监听滑动
     listenScroll: {
       type: Boolean,
       default: false
     },
+    // 下拉到底部触发scrollToEnd
     pullup: {
       type: Boolean,
       default: false
     },
+    // 是否滑动的时候隐藏键盘
     beforeScroll: {
       type: Boolean,
       default: false
     },
+    // 初始化延时时间
     refreshDelay: {
       type: Number,
       default: 20
