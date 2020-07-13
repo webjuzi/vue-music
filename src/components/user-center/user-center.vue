@@ -6,6 +6,9 @@
       <div class="back" @click="back">
         <i class="icon-back"></i>
       </div>
+      <div class="set" @click="set">
+        <img class="img-set" src="./set.png" alt="">
+      </div>
       <!-- tab选项 -->
       <div class="switches-wrapper">
         <switches :switches="switches" :currentIndex="currentIndex"
@@ -98,6 +101,12 @@ export default {
     back() {
       this.$router.back()
     },
+    // 点击设置
+    set() {
+      this.$router.push({
+        path: '/set'
+      })
+    },
     // 随机播放当前列表
     random() {
       let list = this.currentIndex === 0 ? this.favoriteList : this.playHistory
@@ -146,6 +155,18 @@ export default {
       padding 10px
       font-size $font-size-large-x
       color $color-theme
+  .set
+    position absolute
+    top 0
+    right 3px
+    z-index 50
+    width 39px
+    height 42px
+    .img-set
+      width 30px
+      height 30px
+      padding 5px 0px 0px 0px
+      display block
   .switches-wrapper
     margin 10px 0 30px 0
   .play-btn
