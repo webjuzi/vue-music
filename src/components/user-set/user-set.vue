@@ -31,7 +31,7 @@ import { getNewVersion } from 'api/userset'
 export default {
   data() {
     return {
-      version: '1.0.5', // 当前版本
+      version: '1.0.6', // 当前版本
       newVersion: '', // 最新版本
       tipText: '', // 顶部弹框文本
       confirmBtnText: '', // 确认框确认键文本

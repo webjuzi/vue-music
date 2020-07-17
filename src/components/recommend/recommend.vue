@@ -98,7 +98,7 @@ export default {
         name: item.name
       })
       this.$router.push({
-        path: `/search/${singer.id}`
+        path: `/singer/${singer.id}`
       })
       this.setSinger(singer)
     },

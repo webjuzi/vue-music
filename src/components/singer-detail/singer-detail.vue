@@ -71,6 +71,13 @@ export default {
       })
       return ret
     }
+  },
+  watch: {
+    singer() {
+      // 歌手信息变化的时候重新获取数据
+      this.songs = []
+      this._getDetail()
+    }
   }
 }
 </script>
